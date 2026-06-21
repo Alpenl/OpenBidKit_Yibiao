@@ -1,0 +1,16 @@
+#!/bin/sh
+# Pre-Commit Guard: block commits when type-check or tests fail.
+# Enable once per clone with:  git config core.hooksPath .githooks
+#
+# Only runs when staged changes touch the client/ app.
+set -e
+
+if git diff --cached --name-only | grep -q '^client/'; then
+  echo "[pre-commit] client/ changed — running typecheck + tests..."
+  cd client
+  npm run typecheck
+  npm run test
+  echo "[pre-commit] OK"
+else
+  echo "[pre-commit] no client/ changes — skipped"
+fi
