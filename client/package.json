@@ -9,12 +9,18 @@
   "scripts": {
     "dev": "concurrently -k -n vite,electron -c blue,magenta \"vite --host 127.0.0.1 --port 5173 --strictPort\" \"wait-on http://127.0.0.1:5173 && cross-env ELECTRON_RENDERER_URL=http://127.0.0.1:5173 electron .\"",
     "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify": "npm run typecheck && npm run test && npm run build",
     "dist": "npm run build && electron-builder",
     "dist:win": "npm run build && electron-builder --win",
     "dist:mac": "npm run build && electron-builder --mac",
     "postinstall": "electron-builder install-app-deps",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "smoke:electron-native": "electron scripts/electron-native-smoke.cjs",
+    "server": "electron electron/server.cjs",
+    "web": "concurrently -k -n server,vite -c green,blue \"electron electron/server.cjs\" \"cross-env VITE_SERVER_URL=http://127.0.0.1:8799 vite --host 127.0.0.1 --port 5173 --strictPort\"",
     "start": "electron ."
   },
   "build": {
@@ -168,6 +174,7 @@
     "js-yaml": "^4.1.1",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
+    "vitest": "^4.1.9",
     "wait-on": "^8.0.4"
   }
 }
